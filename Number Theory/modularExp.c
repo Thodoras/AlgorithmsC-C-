@@ -1,4 +1,6 @@
 // An exponation mod n algorithm with order of growth of O(logexp * logn * logn).
+// INPUT: int base, int exponent, int modulo
+// OUTPUT: int (base^exponent) mod (modulo)
 
 #include <stdio.h>
 #include <math.h>
