@@ -1,0 +1,1 @@
+int pow2Mod(int base, int expon, int mod);

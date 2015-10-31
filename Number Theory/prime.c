@@ -1,12 +1,12 @@
 // An algorithm that decides whether a number is prime or not. Order of growth 100 * O(modularExp).
 // INPUT int number.
 // OUTPUT 1 if prime, 0 else
-// DEPENDENCIES modularExp.c
+// DEPENDENCIES modularExp.h
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include "modularExp.c"
+#include "modularExp.h"
 
 int primality(int num) {
 	int randbase, val, i;

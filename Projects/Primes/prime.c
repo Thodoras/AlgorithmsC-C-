@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include "modularExp.c"
+#include "modularExp.h"
 
 int primality(int num) {
 	int randbase, val, i;

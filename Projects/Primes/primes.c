@@ -9,7 +9,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-#include "prime.c"
+#include "prime.h"
 
 int main() {
 	int current, i, number, primes = 0;

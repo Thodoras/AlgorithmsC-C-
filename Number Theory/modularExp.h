@@ -1,0 +1,1 @@
+int powMod(int base, int exp, int mod);

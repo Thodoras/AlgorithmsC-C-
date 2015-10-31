@@ -1,0 +1,1 @@
+int primality(int num);
