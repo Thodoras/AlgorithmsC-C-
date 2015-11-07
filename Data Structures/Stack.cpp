@@ -6,15 +6,17 @@ using namespace std;
 
 template <class T>
 class Stack {
-	public:
-		Stack();
-		~Stack();
-		Stack& operator=(Stack& other);
 
-		void push(T value);
-		T pop();
-		int size();
-		void printList();
+	public:
+		Stack();						// Constructor.
+		~Stack();						// Destructor.
+		Stack& operator=(Stack& other);	// Overides operator "=" in order to be able to make deep copies.
+
+		void push(T value);				// Push an item T on top of the stack.
+		T pop();						// Pop an item from the top of the stack.
+		int size();						// Return the size of the stack.
+		void printList();				// Prints the elements of the stack on the console.
+
 	private:
 		int _size;
 		struct Node {
@@ -45,13 +47,14 @@ Stack<T>& Stack<T>::operator=(Stack& other) {
 	if (this == &other) {
 		return *this;
 	}
-	delete _head;
-	_head = NULL;
+	delete this;
+	Stack<int> *st = new Stack<int>();
 	Node *temp = other._head;
 	while(temp != NULL) {
-		push(temp->value);
+		st->push(temp->value);
 		temp = temp->next;
 	}
+	return *st;
 }
 
 template <class T>
