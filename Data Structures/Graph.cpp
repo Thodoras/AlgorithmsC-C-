@@ -1,4 +1,7 @@
+// An implementation of a basic Graph API for directed and undirected graphs.
+
 #include <iostream>
+#include <vector>
 
 using namespace std;
 
@@ -8,68 +11,44 @@ class Graph {
 		int _V;
 		int _E;
 		bool _undirected;
-		struct Node{
-			int value;
-			Node *next;
-		};
-		Node **adj;
+		vector<int> *_adj;
 
 	public:
-		Graph(int V, bool undirected = true);
-		~Graph();
-		//Graph& operator=(Graph& other);
+		Graph(int V, bool undirected = true); 	// Constructor, undirected by default
+		~Graph();								// Destructor
 
-		void addEdge(int vertex1, int vertex2);
-		int V();
-		int E();
-		void printGraph();
-		Graph* reverse();
-
-	private:
-		void _addEdge(int vertex1, int vertex2);
+		void addEdge(int vertex1, int vertex2); // add an edge from vertex1 to vertex2.
+		vector<int> adj(int vertex);            // return all 1st degree neighbors of a given vertex.
+		int V();								// return number of vertices.
+		int E();								// return number of edges.
+		int degreeV(int vertex);				// returns the degree (i.e. number of adjacent vertices) of a given vertex
+		Graph* reverse();						// create a clone graph with opposite direction edges
+		void printGraph();						// print graph.
 };
+
 
 Graph::Graph(int V, bool undirected) {
 	_V = V;
 	_E = 0;
 	_undirected = undirected;
-	adj = new Node*[_V];
-	for (int i = 0; i < _V; i++) {
-		adj[i] = NULL;
-	}
+	_adj = new vector<int>[_V];
 }
 
+
 Graph::~Graph() {
-	for (int i = 0; i < _V; i++) {
-		Node *temp, *toDestroy;
-		temp = adj[i];
-		while(temp != NULL) {
-			toDestroy = temp;
-			temp = temp->next;
-			delete toDestroy;
-		}
-	}
-	delete adj;
+	delete _adj;
 }
 
 void Graph::addEdge(int vertex1, int vertex2) {
 	_E++;
-	Node *edge = new Node();
-	edge->value = vertex2;
-	edge->next = NULL;
-	if (adj[vertex1] == NULL) {
-		adj[vertex1] = edge;
-	}
-	else {
-		Node *tempVert = adj[vertex1];
-		while (tempVert->next != NULL) {
-			tempVert = tempVert->next;
-		}
-		tempVert->next = edge;
-	}
+	_adj[vertex1].push_back(vertex2);
 	if (_undirected) {
-		this->_addEdge(vertex2, vertex1);	
+		_adj[vertex2].push_back(vertex1);
 	}
+}
+
+vector<int> Graph::adj(int vertex) {
+	return _adj[vertex];
 }
 
 int Graph::V() {
@@ -80,58 +59,30 @@ int Graph::E() {
 	return _E;
 }
 
+int Graph::degreeV(int vertex) {
+	return adj(vertex).size();
+}
+
 Graph* Graph::reverse() {
 	if (_undirected) {
 		return this;
 	}
 	Graph *newGraph = new Graph(_V, false);
-	Node *temp;
-	for (int vertex = 0; vertex < _V; vertex++) {
-		temp = adj[vertex];
-		while (temp != 0) {
-			newGraph->addEdge(temp->value, vertex);
-			temp = temp->next;
+	for (int i = 0; i < V(); i++) {
+		for (int j = 0; j < degreeV(i); j++) {
+			newGraph->addEdge(adj(i)[j], i);
 		}
 	}
 	return newGraph;
 }
 
 void Graph::printGraph() {
-	for (int i = 0; i < _V; i++) {
-		Node *temp = adj[i];
-		cout << i << "->";
-		while (temp != NULL) {
-			cout << temp->value << "->";
-			temp = temp->next;
+	for (int i = 0; i < V(); i++) {
+		cout << i << " -- ";
+		for (int j = 0; j < degreeV(i); j++) {
+			cout << adj(i)[j] << "-";
 		}
 		cout << endl;
 	}
 }
 
-void Graph::_addEdge(int vertex1, int vertex2) {
-	Node *edge = new Node();
-	edge->value = vertex2;
-	edge->next = NULL;
-	if (adj[vertex1] == NULL) {
-		adj[vertex1] = edge;
-	}
-	else {
-		Node *tempVert = adj[vertex1];
-		while (tempVert->next != NULL) {
-			tempVert = tempVert->next;
-		}
-		tempVert->next = edge;
-	}
-}
-
-int main() {
-	Graph *g = new Graph(4, false);
-	g->addEdge(0,1);
-	g->addEdge(0,2);
-	g->addEdge(1,3);
-	g->addEdge(2,3);
-	g->printGraph();
-	Graph *h = g->reverse();
-	delete h;
-	cout << (g->E()) << endl;
-}
