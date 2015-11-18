@@ -1,4 +1,5 @@
-// A priority queue implementation without using the STL library (just for fun). To be continued... 
+// A priority queue implementation without using the STL library (just for fun). Insertions and deletions
+// done in O(logN).
 
 #include <iostream>
 
@@ -8,16 +9,18 @@ template <class T>
 class PriorityQueue {
 
 	int size, arraylength;
+	int (*compare)(T x, T y);
 	T *array;
 
 	public:
-		PriorityQueue();
-	//	~PriorityQueue();
+		PriorityQueue(int (*compare)(T x, T y));      	// Constructor that take a comparator as an argument.
+		~PriorityQueue();								// Destructor.
 
-		bool isEmpty();
-		void insert(T key);
-		T removeMin();
-		void print();
+		bool isEmpty();									// Returns true if PQ is empty.
+		void insert(T key);								// Imserts a value.
+		T peekMin();									// Returns the minimum key without deleting it.
+		T removeMin();									// Returns and deletes minimum key.
+		void print();									// Prints all the elements of the heap in height order.
 
 	private:
 		void swim();
@@ -28,10 +31,16 @@ class PriorityQueue {
 };
 
 template <class T>
-PriorityQueue<T>::PriorityQueue() {
+PriorityQueue<T>::PriorityQueue(int (*compare)(T x, T y)) {
 	array = new T[1];
 	arraylength = 1;
 	size = 0;
+	this->compare = compare;
+}
+
+template <class T>
+PriorityQueue<T>::~PriorityQueue() {
+	delete[] array;
 }
 
 template <class T>
@@ -46,6 +55,11 @@ void PriorityQueue<T>::insert(T key) {
 	if (size == arraylength) {
 		array = resize(arraylength, 2*arraylength);
 	}
+}
+
+template <class T>
+T PriorityQueue<T>::peekMin() {
+	return array[0];
 }
 
 template <class T>
@@ -71,7 +85,7 @@ template <class T>
 void PriorityQueue<T>::swim() {
 	int temp = size;
 	while (temp > 1) {
-		if (array[temp - 1] < array[temp/2 - 1]) {
+		if (compare(array[temp - 1], array[temp/2 - 1]) < 0) {
 			exch(temp - 1, temp/2 - 1);
 			temp /= 2;
 		}
@@ -86,7 +100,7 @@ void PriorityQueue<T>::sink(int pos) {
 	pos++;
 	while (2*pos <= size) {
 		int min = minIndex(2*pos-1, 2*pos);
-		if (array[min] < array[pos - 1]) {
+		if (compare(array[min], array[pos - 1]) < 0) {
 			exch(min, pos-1);
 			pos = min + 1;
 		}
@@ -100,7 +114,7 @@ template <class T>
 int PriorityQueue<T>::minIndex(int i, int j) {
 	if (i == size) {return j;}
 	if (j == size) {return i;}
-	if (array[j] < array[i]) {return j;}
+	if (compare(array[j], array[i]) < 0) {return j;}
 	return i;
 }
 
@@ -122,14 +136,6 @@ T* PriorityQueue<T>::resize(int& oldLength, int newLength) {
 	return newArray;
 }
 
-int main() {
-	PriorityQueue<int> *pq = new PriorityQueue<int>();
-	pq->insert(3);
-	pq->insert(2);
-	pq->insert(7);
-	pq->insert(0);
-	pq->insert(1);
-	pq->removeMin();
-	pq->removeMin();
-	pq->print();
+int compare(int x, int y) {
+	return x - y;
 }
