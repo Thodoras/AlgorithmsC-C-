@@ -1,21 +1,11 @@
-// A deterministic, stable sorting algorithm for generic arrays with order of growth O(NlogN).
-// Needs a compare function.
+/*
+ * MergeSort.cpp
+ *
+ *  Created on: Nov 22, 2015
+ *      Author: thodoras
+ */
 
-#include <iostream>
-
-using namespace std;
-
-template <class T>
-class Mergesort {
-
-	public:
-		static void sort(T array[], int length, int (*compare)(T x, T y));					// The method to be used.
-
-	private:
-		static void sort(T array[], T aux[], int low, int high, int (*compare)(T x, T y));
-		static void merge(T array[], T aux[], int low, int mid, int high, int (*compare)(T x, T y));
-		static void swap(T array[], int i, int j);
-};
+#include "MergeSort.h"
 
 template <class T>
 void Mergesort<T>::sort(T array[], int length, int (*compare)(T x, T y)) {
