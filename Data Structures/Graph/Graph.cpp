@@ -13,7 +13,7 @@ Graph::Graph(int V, bool undirected) {
 	_V = V;
 	_E = 0;
 	_undirected = undirected;
-	_adj = vector<int> (_V);
+	_adj = vector<vector<int> > (_V);
 }
 
 Graph::~Graph() {
@@ -25,10 +25,6 @@ void Graph::addEdge(int vertex1, int vertex2) {
 	if (_undirected) {
 		_adj[vertex2].push_back(vertex1);
 	}
-}
-
-vector<int> Graph::adj(int vertex) {
-	return _adj[vertex];
 }
 
 vector<int> Graph::adj(int vertex) {

@@ -18,7 +18,7 @@ class Graph {
 	int _V;
 	int _E;
 	bool _undirected;
-	std::vector<int> _adj;
+	std::vector<std::vector<int> > _adj;
 
 public:
 	Graph(int V, bool undirected = true);	// Constructor, undirected by default
